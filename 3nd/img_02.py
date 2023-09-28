@@ -1,20 +1,22 @@
 import cv2
 import numpy as np
 
-mask = np.zeros((300,300,3), dtype='uint8')
-cv2.circle(mask,(150,150),100,(255,255,255),-1)
+mask = np.zeros((300, 300, 3), dtype='uint8')
+cv2.circle(mask, (150, 150), 100, (255, 255, 255), -1)
 mask = cv2.GaussianBlur(mask, (35, 35), 0)
-mask = mask / 255                          # 除以 255，計算每個像素的黑白色彩在 255 中所佔的比例
+mask = mask / 255
 
-img = cv2.imread('./3nd/02.jpg')              # 開啟圖片
-bg = np.zeros((300,300,3), dtype='uint8')  # 產生一張黑色背景
-bg = 255 - bg                              # 轉換成白色背景
-img = img / 255                            # 除以 255，計算每個像素的色彩在 255 中所佔的比例
-bg = bg / 255                              # 除以 255，計算每個像素的色彩在 255 中所佔的比例
+img = cv2.imread('./3nd/02.jpg')
+img = cv2.resize(img, (300, 300))
+img = img / 255
 
-out  = bg * (1 - mask) + img * mask        # 根據比例混合
-out = (out * 255).astype('uint8')          # 乘以 255 之後轉換成整數
+bg = np.zeros((300, 300, 3), dtype='uint8')
+bg = 255 - bg
+bg = bg / 255
 
-cv2.imshow('oxxostudio',out)
+out = bg * (1 - mask) + img * mask
+out = (out * 255).astype('uint8')
+
+cv2.imshow('ds', out)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

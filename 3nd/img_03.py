@@ -1,18 +1,17 @@
 import cv2
-import numpy as np
 
-image = cv2.imread('3nd/01.jpg')
-background = cv2.imread('3nd/02.jpg')
+img1 = cv2.imread('3nd/01.jpg')
+img2 = cv2.imread('3nd/02.jpg')
+w = img1.shape[1]   
+h = img1.shape[0]   
 
+for i in range(w):
+    img1[:,i,0] = img1[:,i,0]*((300-i)/300) + img2[:,i,0]*(i/300)  
+    img1[:,i,1] = img1[:,i,1]*((300-i)/300) + img2[:,i,1]*(i/300)  
+    img1[:,i,2] = img1[:,i,2]*((300-i)/300) + img2[:,i,2]*(i/300)  
 
-background = cv2.resize(background, (image.shape[1], image.shape[0]))
+show = img1.astype('float32')/255    
+cv2.imshow('Result', show)
 
-alpha = np.ones(image.shape, dtype=image.dtype) * 255  
-image_with_alpha = cv2.merge((image, alpha))
-background_with_alpha = cv2.merge((background, alpha))
-alpha_blend = 0.5  
-composite = cv2.addWeighted(image_with_alpha, alpha_blend, background_with_alpha, 1 - alpha_blend, 0)
-
-cv2.imshow('Composite Image', composite)
-cv2.waitKey(0)
+cv2.waitKey(0)       
 cv2.destroyAllWindows()
